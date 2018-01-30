@@ -1,0 +1,23 @@
+{
+  "name": "hyperion-algorithms",
+  "version": "0.79.1",
+  "description": "Algorithms meant to be used with hyperion.",
+  "main": "algorithm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magaya-dev/hyperion-algorithms.git"
+  },
+  "keywords": [
+    "hyperion",
+    "algorithms"
+  ],
+  "author": "Magaya Corporation",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/magaya-dev/hyperion-algorithms/issues"
+  },
+  "homepage": "https://github.com/magaya-dev/hyperion-algorithms#readme"
+}
