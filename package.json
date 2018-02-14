@@ -3,6 +3,9 @@
   "version": "0.790.1",
   "description": "Algorithms meant to be used with hyperion.",
   "main": "lib/algorithm.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
