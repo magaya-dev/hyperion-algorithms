@@ -1,6 +1,6 @@
 {
   "name": "@magaya/hyperion-algorithms",
-  "version": "0.790.1",
+  "version": "1.0.0",
   "description": "Algorithms meant to be used with hyperion.",
   "main": "lib/algorithm.js",
   "files": [
@@ -19,7 +19,7 @@
     "documents"
   ],
   "author": "Magaya Corporation",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/magaya-dev/hyperion-algorithms/issues"
   },
