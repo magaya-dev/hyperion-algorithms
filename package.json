@@ -1,6 +1,6 @@
 {
   "name": "@magaya/hyperion-algorithms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Algorithms meant to be used with hyperion.",
   "main": "lib/algorithm.js",
   "files": [
