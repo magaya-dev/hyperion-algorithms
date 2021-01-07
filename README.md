@@ -200,7 +200,7 @@ algo.findFirst(dbx.using(dbx.Shipping.Booking.ListByTime))
 const booking = await algo.findFirst(dbx.using(dbx.Shipping.Booking.ListByTime));
 
 // We now have the first booking in the cursor
-        // Note: these are still hyperion objects
+// Note: these are still hyperion objects
 if (booking) {
     console.log(booking.CreatedByName);
 }
