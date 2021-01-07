@@ -10,7 +10,7 @@ const connection = require('{get hyperion somehow}');
 
 const algo = new Algorithms(connection.async);
 
-algo.select(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime), 10)
+algo.select(connection.hyperion.dbx.using(connection.hyperion.dbx.Shipping.Booking.ListByTime), 10)
     .where(booking => booking.GUID !== undefined)
     .project(booking => ({
         id: booking.GUID,
@@ -37,7 +37,7 @@ algo.select(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.L
 ---
 ```js
 // Continuation pattern
-algo.forEach(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.forEach(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(booking => {
         doSomethingWith(booking);
     })
@@ -47,7 +47,7 @@ algo.forEach(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.
     });
 
 // Async/Await pattern
-await algo.forEach(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+await algo.forEach(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(booking => {
         doSomethingWith(booking);
     });
@@ -59,7 +59,7 @@ console.log('done!');
 ---
 ```js
 // Continuation pattern
-algo.transform(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.transform(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(booking => {
         return {
             creator: booking.CreatedByName,
@@ -73,7 +73,7 @@ algo.transform(connection.hyperion.using(connection.hyperion.dbx.Shipping.Bookin
     });
 
 // Async/Await pattern
-const bookings = await algo.transform(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const bookings = await algo.transform(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(booking => {
         return {
             creator: booking.CreatedByName,
@@ -89,7 +89,7 @@ bookings.forEach(b => console.log(b.creator));
 ---
 ```js
 // Continuation pattern
-algo.accumulate(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.accumulate(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(0, (total, booking) => {   // first argument is the initial value
         // The new accumlation should be returned, so it can be
         // sent in the next iteration
@@ -101,7 +101,7 @@ algo.accumulate(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booki
     });
 
 // Async/Await pattern
-const totalWeight = await algo.accumulate(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const totalWeight = await algo.accumulate(dbx.using(dbx.Shipping.Booking.ListByTime))
     .callback(0, (total, booking) => {   // first argument is the initial value
         // The new accumlation should be returned, so it can be
         // sent in the next iteration
@@ -115,14 +115,14 @@ console.log(totalWeight);
 ---
 ```js
 // Continuation pattern
-algo.anyOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.anyOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0) // Will stop iteration on first true
     .then(result => result
         ? console.log('At least one booking has pieces.')
         : console.log('All bookings are empty!'));
 
 // Async/Await pattern
-const result = await algo.anyOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const result = await algo.anyOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0); // Will stop iteration on first true
 
 result ? console.log('At least one booking has pieces.') : console.log('All bookings are empty!'));
@@ -131,14 +131,14 @@ result ? console.log('At least one booking has pieces.') : console.log('All book
 ---
 ```js
 // Continuation pattern
-algo.allOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.allOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0) // Will stop iteration on first false
     .then(result => result
         ? console.log('All bookings have pieces.')
         : console.log('At least one booking is empty!'));
 
 // Async/Await pattern
-const result = await algo.allOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const result = await algo.allOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0); // Will stop iteration on first false
 
 result ? console.log('All bookings have pieces.') : console.log('At least one booking is empty!'));
@@ -147,14 +147,14 @@ result ? console.log('All bookings have pieces.') : console.log('At least one bo
 ---
 ```js
 // Continuation pattern
-algo.noneOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.noneOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0) // Will stop iteration on first false
     .then(result => result
         ? console.log('All bookings are empty!')
         : console.log('At least one booking has pieces.'));
 
 // Async/Await pattern
-const result = await algo.noneOf(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const result = await algo.noneOf(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.TotalPieces > 0); // Will stop iteration on first false
 
 result ? console.log('All bookings are empty!') : console.log('At least one booking has pieces.'));
@@ -163,7 +163,7 @@ result ? console.log('All bookings are empty!') : console.log('At least one book
 ---
 ```js
 // Continuation pattern
-algo.find(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.find(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.CreatedByName === 'Jane Doe')
     .then(booking => {
         // We now have the first booking that was created by Jane Doe or no booking
@@ -174,7 +174,7 @@ algo.find(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.Lis
     });
 
 // Async/Await pattern
-const bookings = await algo.find(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const bookings = await algo.find(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.CreatedByName === 'Jane Doe');
 
 // We now have the first booking that was created by Jane Doe or no booking
@@ -187,7 +187,7 @@ if (booking) {
 ---
 ```js
 // Continuation pattern
-algo.findFirst(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.findFirst(dbx.using(dbx.Shipping.Booking.ListByTime))
     .then(booking => {
         // We now have the first booking in the cursor
         // Note: these are still hyperion objects
@@ -197,7 +197,7 @@ algo.findFirst(connection.hyperion.using(connection.hyperion.dbx.Shipping.Bookin
     });
 
 // Async/Await pattern
-const booking = await algo.findFirst(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime));
+const booking = await algo.findFirst(dbx.using(dbx.Shipping.Booking.ListByTime));
 
 // We now have the first booking in the cursor
         // Note: these are still hyperion objects
@@ -209,7 +209,7 @@ if (booking) {
 ---
 ```js
 // Continuation pattern
-algo.collect(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+algo.collect(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.CreatedByName === 'Jane Doe')
     .then(bookings => {
         // We now have all the bookings created by Jane Doe
@@ -220,7 +220,7 @@ algo.collect(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.
     });
 
 // Async/Await pattern
-const bookings = await algo.collect(connection.hyperion.using(connection.hyperion.dbx.Shipping.Booking.ListByTime))
+const bookings = await algo.collect(dbx.using(dbx.Shipping.Booking.ListByTime))
     .where(booking => booking.CreatedByName === 'Jane Doe');
 
 // We now have all the bookings created by Jane Doe
