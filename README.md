@@ -29,7 +29,7 @@ algo.select(connection.hyperion.dbx.using(connection.hyperion.dbx.Shipping.Booki
 - [find](#find) - Returns first item that matches predicate.
 - [findFirst](#findFirst) - Returns first element in the cursor, no predicate.
 - [collect](#collect) - Iterates the entire cursor and returns array of all elements that match predicate.
-- [select](#select) - Used to obtain a specific number of element. Works like collect but will only iterate as far as needed to get the requested number of elements.
+- [select](#select) - Used to obtain and transform a specific number of elements. Works like collect but will only iterate as far as needed to get the requested number of elements. 
 
 ## Examples
 
@@ -230,3 +230,50 @@ bookings.forEach(booking => {
 });
 ```
 ### select
+---
+```js
+// Continuation pattern
+// Specify number of elements to retrieve
+algo.select(dbx.using(dbx.Shipping.Booking.ListByTime), 10) 
+    .project(booking => ({
+        id: booking.GUID,
+        createdOn: new Date(booking.CreatedOn)
+    }))
+    .then(bookings => console.log(bookings.length)); // Should be at most 10, but could be less
+
+// Async/Await pattern
+// Specify number of elements to retrieve
+const bookings = await algo.select(dbx.using(dbx.Shipping.Booking.ListByTime), 10)  
+    .project(booking => ({
+        id: booking.GUID,
+        createdOn: new Date(booking.CreatedOn)
+    }));
+
+console.log(bookings.length); // Should be at most 10, but could be less
+
+// Select can have a 'where' predicate, but isn't mandatory
+algo.select(dbx.using(dbx.Shipping.Booking.ListByTime), 10) 
+    .where(booking => booking.CreatedByName === 'Jane Doe') // only the first 10 by Jane Doe
+    .project(booking => ({
+        id: booking.GUID,
+        createdOn: new Date(booking.CreatedOn)
+    }))
+    .then(bookings => console.log(bookings.length)); // Should be at most 10, but could be less
+
+// Select lets you filter after the transform from 'project'
+// seldom used but may be useful in some scenarios
+algo.select(dbx.using(dbx.Shipping.Booking.ListByTime), 10)
+    .preProject(true) // We want to apply 'where' to non-hyperion object
+    .where(booking => !booking.overBooked) // Note use of projected property 'overBooked'
+    .project(booking => ({
+        id: booking.GUID,
+        createdOn: new Date(booking.CreatedOn),
+        overBooked: booking.TotalPieces > booking.MaximumPieces
+    }))
+    .then(bookings => {
+        // Note: this is still the transformed object
+        bookings.forEach(b => {
+            console.log(`${b.id} was overbooked on ${b.createdOn}`);
+        });
+    }); 
+```
